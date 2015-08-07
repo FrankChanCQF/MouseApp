@@ -153,7 +153,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(mDragHelper.smoothSlideViewTo())
+                if(mDragHelper.smoothSlideViewTo(mTarget,mOriginLeft,mOriginTop));
             }
         },1000);
     }
