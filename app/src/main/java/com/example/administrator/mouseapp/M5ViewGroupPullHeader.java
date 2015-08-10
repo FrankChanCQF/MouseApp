@@ -1,24 +1,30 @@
 package com.example.administrator.mouseapp;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.widget.ViewDragHelper;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015/8/4.
  */
 public class M5ViewGroupPullHeader extends LinearLayout {
 
-    private ViewDragHelper mDragHelper;
+    private M5ViewDragHelper mDragHelper;
 
     private View mTarget, mSupport;
 
-    private int mDistanceX,mDistanceY,mOriginLeft,mOriginTop,mHeaderHeight;
+    private int mDistanceX,mDistanceY,mOriginLeft,mOriginTop,mHeaderHeight,mMaxHeaderHeight,mCurrentTop;
 
     private boolean isRefreshing;
 
@@ -51,6 +57,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
          */
         setPadding(0, -mSupport.getMeasuredHeight(), 0, 0);
         mHeaderHeight = mSupport.getMeasuredHeight();
+        mMaxHeaderHeight = mHeaderHeight*4/3;
     }
 
     @Override
@@ -62,25 +69,85 @@ public class M5ViewGroupPullHeader extends LinearLayout {
         }
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        int action = ev.getAction();
-        switch (action){
-            case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    mDragHelper.cancel();
-                    return false;
+
+    /**
+     * change-5
+     */
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        int action = ev.getAction();
+//        switch (action){
+//            case MotionEvent.ACTION_CANCEL:
+//                case MotionEvent.ACTION_UP:
+//                    mDragHelper.cancel();
+//                    return false;
+//        }
+//        return mDragHelper.shouldInterceptTouchEvent(ev);
+//    }
+//
+//    @Override
+//    public boolean onTouchEvent(@NonNull MotionEvent event) {
+//        mDragHelper.processTouchEvent(event);
+//        return true;
+//    }
+
+    public enum PullState {
+        UNSPECIFIED,UP,DOWN;
+
+        static PullState getPullState(float factor){
+            if (factor>0){
+                return DOWN;
+            }else if(factor<0){
+                return UP;
+            }
+            return UNSPECIFIED;
         }
-        return mDragHelper.shouldInterceptTouchEvent(ev);
     }
+
+    private PullState mPullState = PullState.UNSPECIFIED;
+
+    private float mLastY;
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
-        mDragHelper.processTouchEvent(event);
-        return true;
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        final int action = MotionEventCompat.getActionMasked(event);
+        switch (action) {
+            case MotionEvent.ACTION_DOWN: {
+                mLastY = event.getRawY();
+                mDragHelper.processTouchEvent(event);
+                break;
+            }
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                mDragHelper.processTouchEvent(event);
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                float currentY = event.getRawY();
+                mPullState = PullState.getPullState(currentY - mLastY);
+                //到顶部，并且是向下拉
+                if (invokeIntercept()) {
+                    mDragHelper.processTouchEvent(event);
+                    //发送cancel事件，防止listview响应之前的事件，出现点击操作。
+                    event.setAction(MotionEvent.ACTION_CANCEL);
+                    super.dispatchTouchEvent(event);
+                    return true;
+                }
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mDragHelper.processTouchEvent(event);
+                break;
+            default:
+                break;
+        }
+        return super.dispatchTouchEvent(event);
     }
 
-
+    private boolean invokeIntercept(){
+        return (isOnTheTop() && mPullState == PullState.DOWN)
+                ||(mCurrentTop<=mMaxHeaderHeight&&mCurrentTop>0);
+    }
 
     private void init(){
         LayoutInflater.from(getContext()).inflate(R.layout.m5_view_group,this);
@@ -90,7 +157,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
          * changed-1
          * */
         setOrientation(VERTICAL);
-        mDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
+        mDragHelper = M5ViewDragHelper.create(this, 1.0f, new M5ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View view, int i) {
                 return mTarget == view;
@@ -104,7 +171,8 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
                 mSupport.layout(left - mDistanceX, top - mDistanceY,
                         left - mDistanceX + mSupport.getWidth(), top - mDistanceY + mSupport.getHeight());
-                reachHeight = top>=mHeaderHeight;
+                reachHeight = top >= mHeaderHeight;
+                mCurrentTop = top;
 //                mSupport.offsetTopAndBottom(top-mSupport.getTop()-mDistanceY);
 //                mSupport.offsetLeftAndRight(left-mSupport.getLeft() -mDistanceX);
             }
@@ -128,17 +196,20 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 /**
                  * change-4
                  */
-                return Math.max(mOriginTop, Math.min(mHeaderHeight*4/3,top));
+                return Math.max(mOriginTop, Math.min(isRefreshing ? mHeaderHeight : mMaxHeaderHeight, top));
             }
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
                 super.onViewReleased(releasedChild, xvel, yvel);
-                if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft, reachHeight?mHeaderHeight:mOriginTop)) {
+                if (isRefreshing) {
+                    return;
+                }
+                if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft, reachHeight ? mHeaderHeight : mOriginTop)) {
 //                    ViewCompat.postInvalidateOnAnimation(M5ViewGroup.this);
                     postInvalidate();
                 }
-                if(reachHeight&&!isRefreshing){
+                if (reachHeight) {
                     isRefreshing = true;
                     startRefresh();
                 }
@@ -147,15 +218,55 @@ public class M5ViewGroupPullHeader extends LinearLayout {
 
 
         });
+        mDragHelper.setResistance(0.6f);
+        setupAdapter();
     }
 
     private void startRefresh(){
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(mDragHelper.smoothSlideViewTo(mTarget,mOriginLeft,mOriginTop));
+        removeCallbacks(mRefreshRunnable);
+        postDelayed(mRefreshRunnable,10000);
+    }
+
+    private Runnable mRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(mDragHelper.smoothSlideViewTo(mTarget,mOriginLeft,mOriginTop)){
+                ViewCompat.postInvalidateOnAnimation(M5ViewGroupPullHeader.this);
             }
-        },1000);
+            isRefreshing = false;
+        }
+    };
+
+    private void setupAdapter(){
+        if(mTarget instanceof AbsListView){
+            ((AbsListView) mTarget).setAdapter(
+                    new ArrayAdapter<String>(getContext(),android.R.layout.simple_expandable_list_item_1,getListData()));
+        }
+    }
+
+    private List<String> getListData(){
+        List<String>list = new ArrayList<String>();
+        for (int i = 1; i < 15; i++) {
+            list.add(String.valueOf(i));
+
+        }
+        return list;
+    }
+
+    private boolean isOnTheTop(){
+        if(mTarget instanceof AbsListView){
+            AbsListView absListView = ((AbsListView) mTarget);
+            Adapter adapter = absListView.getAdapter();
+            if(adapter!=null&&!adapter.isEmpty()){
+                if(absListView.getFirstVisiblePosition()==0){
+                    if(absListView.getChildAt(0)!=null&&absListView.getChildAt(0).getTop()>=mOriginTop){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
 }
