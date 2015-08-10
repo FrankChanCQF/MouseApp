@@ -128,7 +128,7 @@ public class M5ViewDragHelper {
     private float mMinVelocity;
 
     //damping factor
-    private float mResistance = 1.0f;
+    private float[] mResistance = new float[]{1.0f,1.0f,1.0f,1.0f};
 
     private int mEdgeSize;
     private int mTrackingEdges;
@@ -395,11 +395,14 @@ public class M5ViewDragHelper {
         mScroller = ScrollerCompat.create(context, sInterpolator);
     }
 
-    public void setResistance(float resistance){
-        mResistance = resistance;
+    public void setResistance(float up,float down,float left,float right) {
+        mResistance[0] = up;
+        mResistance[1] = down;
+        mResistance[2] = left;
+        mResistance[3] = right;
     }
 
-    public float getResisitance(){
+    public float[] getResisitance(){
         return mResistance;
     }
 
@@ -1134,8 +1137,10 @@ public class M5ViewDragHelper {
                     final int index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                     final float x = MotionEventCompat.getX(ev, index);
                     final float y = MotionEventCompat.getY(ev, index);
-                    final int idx = (int) ((x - mLastMotionX[mActivePointerId])*mResistance);
-                    final int idy = (int) ((y - mLastMotionY[mActivePointerId])*mResistance);
+                    float deltaX = x - mLastMotionX[mActivePointerId];
+                    final int idx = (int) (deltaX<0?deltaX*mResistance[2]:deltaX*mResistance[3]);
+                    float deltaY = y - mLastMotionY[mActivePointerId];
+                    final int idy = (int) (deltaY<0?deltaY*mResistance[0]:deltaY*mResistance[1]);
 
                     dragTo(mCapturedView.getLeft() + idx, mCapturedView.getTop() + idy, idx, idy);
 

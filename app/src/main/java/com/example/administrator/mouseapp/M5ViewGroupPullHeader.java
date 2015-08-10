@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
@@ -18,13 +20,15 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/8/4.
  */
-public class M5ViewGroupPullHeader extends LinearLayout {
+public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.OnItemClickListener{
 
     private M5ViewDragHelper mDragHelper;
 
     private View mTarget, mSupport;
 
-    private int mDistanceX,mDistanceY,mOriginLeft,mOriginTop,mHeaderHeight,mMaxHeaderHeight,mCurrentTop;
+    private int mDistanceX,mDistanceY,mOriginLeft,mOriginTop;
+
+    private M5ViewHeaderManager mHeaderManager;
 
     private boolean isRefreshing;
 
@@ -56,8 +60,10 @@ public class M5ViewGroupPullHeader extends LinearLayout {
          * changed-0
          */
         setPadding(0, -mSupport.getMeasuredHeight(), 0, 0);
-        mHeaderHeight = mSupport.getMeasuredHeight();
-        mMaxHeaderHeight = mHeaderHeight*4/3;
+        int headerHeight = mSupport.getMeasuredHeight();
+        if(mHeaderManager==null) {
+            mHeaderManager = new M5ViewHeaderManager(0, headerHeight, headerHeight * 4 / 3, headerHeight+5);
+        }
     }
 
     @Override
@@ -124,8 +130,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
             case MotionEvent.ACTION_MOVE: {
                 float currentY = event.getRawY();
                 mPullState = PullState.getPullState(currentY - mLastY);
-                //到顶部，并且是向下拉
-                if (invokeIntercept()) {
+                if (invokeMoveIntercept()) {
                     mDragHelper.processTouchEvent(event);
                     //发送cancel事件，防止listview响应之前的事件，出现点击操作。
                     event.setAction(MotionEvent.ACTION_CANCEL);
@@ -135,7 +140,6 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 break;
             }
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
                 mDragHelper.processTouchEvent(event);
                 break;
             default:
@@ -144,9 +148,14 @@ public class M5ViewGroupPullHeader extends LinearLayout {
         return super.dispatchTouchEvent(event);
     }
 
-    private boolean invokeIntercept(){
-        return (isOnTheTop() && mPullState == PullState.DOWN)
-                ||(mCurrentTop<=mMaxHeaderHeight&&mCurrentTop>0);
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return false;
+    }
+
+    private boolean invokeMoveIntercept(){
+        return (mHeaderManager.isHeaderVisible())
+                ||(isOnTheTop() && mPullState == PullState.DOWN);
     }
 
     private void init(){
@@ -157,7 +166,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
          * changed-1
          * */
         setOrientation(VERTICAL);
-        mDragHelper = M5ViewDragHelper.create(this, 1.0f, new M5ViewDragHelper.Callback() {
+        mDragHelper = M5ViewDragHelper.create(this, 2.0f, new M5ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View view, int i) {
                 return mTarget == view;
@@ -171,8 +180,8 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
                 mSupport.layout(left - mDistanceX, top - mDistanceY,
                         left - mDistanceX + mSupport.getWidth(), top - mDistanceY + mSupport.getHeight());
-                reachHeight = top >= mHeaderHeight;
-                mCurrentTop = top;
+                mHeaderManager.setCurrentHeight(top);
+                reachHeight = mHeaderManager.reachTargetHeight();
 //                mSupport.offsetTopAndBottom(top-mSupport.getTop()-mDistanceY);
 //                mSupport.offsetLeftAndRight(left-mSupport.getLeft() -mDistanceX);
             }
@@ -196,7 +205,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 /**
                  * change-4
                  */
-                return Math.max(mOriginTop, Math.min(isRefreshing ? mHeaderHeight : mMaxHeaderHeight, top));
+                return Math.max(mOriginTop, Math.min(isRefreshing ? mHeaderManager.getNormalHeight():mHeaderManager.getMaxHeight(), top));
             }
 
             @Override
@@ -205,7 +214,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
                 if (isRefreshing) {
                     return;
                 }
-                if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft, reachHeight ? mHeaderHeight : mOriginTop)) {
+                if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft, reachHeight ? mHeaderManager.getNormalHeight() : mOriginTop)) {
 //                    ViewCompat.postInvalidateOnAnimation(M5ViewGroup.this);
                     postInvalidate();
                 }
@@ -218,7 +227,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
 
 
         });
-        mDragHelper.setResistance(0.6f);
+        mDragHelper.setResistance(1.2f,0.4f,1.0f,1.0f);
         setupAdapter();
     }
 
@@ -241,6 +250,7 @@ public class M5ViewGroupPullHeader extends LinearLayout {
         if(mTarget instanceof AbsListView){
             ((AbsListView) mTarget).setAdapter(
                     new ArrayAdapter<String>(getContext(),android.R.layout.simple_expandable_list_item_1,getListData()));
+            ((AbsListView) mTarget).setOnItemClickListener(this);
         }
     }
 
@@ -269,4 +279,8 @@ public class M5ViewGroupPullHeader extends LinearLayout {
         return true;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.e("frankchan","onItemClick");
+    }
 }
