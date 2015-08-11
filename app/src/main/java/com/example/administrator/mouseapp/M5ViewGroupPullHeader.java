@@ -34,6 +34,8 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
 
     private boolean reachHeight;
 
+    public boolean enablePullRefresh = true;
+
     public M5ViewGroupPullHeader(Context context) {
         super(context);
         init();
@@ -56,24 +58,26 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
          * changed-0
          */
         int headerHeight = mSupport.getMeasuredHeight();
-        initHeaderController(headerHeight,0, headerHeight * 4 / 3, headerHeight+5);
-        setPadding(0, -mHeaderController.getNormalHeight(), 0, 0);
+        initHeaderController(0, headerHeight, headerHeight * 4 / 3, headerHeight + 5,mSupport.getWidth());
+        setPadding(0, -mHeaderController.getExtraTopPadding(getHeaderType()), 0, 0);
+
         mOriginLeft = mTarget.getLeft();
         mOriginTop = mTarget.getTop();
     }
 
-    protected void initHeaderController(int normal,int min,int max,int target){
-        if(mHeaderController == null) {
+    private void initHeaderController(int min,int normal,int max ,int refresh,int width){
+        if(mHeaderController ==null) {
             if(mSupport instanceof M5IHeader){
-                M5IHeader header = ((M5IHeader) mSupport);
-                if(header.getBaseHeight()>0){
+                M5IHeader header = (M5IHeader) mSupport;
+                if(header.getBaseHeight() > 0){
                     normal = header.getBaseHeight();
                 }
-                min = (int)(normal*header.getMinHeightScale());
-                max = (int) (normal * header.getMaxHeightScale());
-                target = (int) (normal * header.getTargetHeightScale());
+                min = (int)(header.getMinHeightScale()*normal);
+                max = (int)(header.getMaxHeightScale()*normal);
+                refresh = (int)(header.getRefreshHeightScale()*normal);
             }
-            mHeaderController = new M5ViewHeaderController(normal,min,max,target);
+            mHeaderController = new M5ViewHeaderController(min,normal,max,refresh);
+            mHeaderController.setHeaderWidth(width);
         }
     }
 
@@ -148,7 +152,7 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
             case MotionEvent.ACTION_MOVE: {
                 float currentY = event.getRawY();
                 mPullState = PullState.getPullState(currentY - mLastY);
-                if (invokeMotionIntercept()) {
+                if (invokeMoveIntercept()) {
                     mDragHelper.processTouchEvent(event);
                     //发送cancel事件，防止listview响应之前的事件，出现点击操作。
                     event.setAction(MotionEvent.ACTION_CANCEL);
@@ -159,8 +163,6 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
             }
             case MotionEvent.ACTION_UP:
                 mDragHelper.processTouchEvent(event);
-                break;
-            case MotionEvent.ACTION_CANCEL:
                 break;
             default:
                 break;
@@ -173,8 +175,8 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
         return false;
     }
 
-    private boolean invokeMotionIntercept(){
-        return (mHeaderController.isHeaderVisible())
+    private boolean invokeMoveIntercept(){
+        return (mHeaderController.shouldIntercept(getHeaderType()))
                 ||(isOnTheTop() && mPullState == PullState.DOWN);
     }
 
@@ -201,11 +203,15 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
                 mHeaderController.setCurrentHeight(top);
                 reachHeight = mHeaderController.reachTargetHeight();
                 if(mSupport instanceof M5IHeader){
-                    ((M5IHeader) mSupport).dynamicLayout(0, 0, left, top);
-                    ((M5IHeader) mSupport).dynamicRedraw(mHeaderController.getCurrentHeight(), mHeaderController.getCurrentPercentage());
+                    ((M5IHeader) mSupport).dynamicLayout(mSupport,left,
+                            mHeaderController.getDynamicTop(getHeaderType()) ,left + mHeaderController.getHeaderWidth(),top);
+                    ((M5IHeader) mSupport).dynamicRedraw(mSupport,mHeaderController.getCurrentHeight(),mHeaderController.getCurrentPercentage());
                 }else {
-                    mSupport.layout(left - mSupport.getWidth(), top - mSupport.getHeight(),left, top);
+                    mSupport.layout(left, top - mHeaderController.getNormalHeight(),
+                            left + mHeaderController.getHeaderWidth(), top);
                 }
+//                mSupport.layout(left, top - mHeaderController.getNormalHeight(),
+//                        left + mHeaderController.getHeaderWidth(), top);
 //                mSupport.offsetTopAndBottom(top-mSupport.getTop()-mDistanceY);
 //                mSupport.offsetLeftAndRight(left-mSupport.getLeft() -mDistanceX);
             }
@@ -229,7 +235,7 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
                 /**
                  * change-4
                  */
-                return Math.max(mOriginTop, Math.min(isRefreshing ? mHeaderController.getNormalHeight() : mHeaderController.getMaxHeight(), top));
+                return Math.max(mOriginTop, Math.min(mHeaderController.getMaxRange(getHeaderType(),isRefreshing), top));
             }
 
             @Override
@@ -238,13 +244,16 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
                 if (isRefreshing) {
                     return;
                 }
-                if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft, reachHeight ? mHeaderController.getNormalHeight() : mOriginTop)) {
-//                    ViewCompat.postInvalidateOnAnimation(M5ViewGroup.this);
-                    postInvalidate();
+                boolean scrollBack = mHeaderController.shouldScrollBackRelease(getHeaderType());
+                if(scrollBack){
+                    if (mDragHelper.smoothSlideViewTo(releasedChild, mOriginLeft,
+                            mHeaderController.getScrollBackHeight(getHeaderType(),reachHeight,mOriginTop))) {
+                        postInvalidate();
+                    }
                 }
                 if (reachHeight) {
                     isRefreshing = true;
-                    startRefresh();
+                    startRefresh(scrollBack);
                 }
 
             }
@@ -255,20 +264,34 @@ public class M5ViewGroupPullHeader extends LinearLayout implements AdapterView.O
         setupAdapter();
     }
 
-    private void startRefresh(){
-        removeCallbacks(mRefreshRunnable);
-        postDelayed(mRefreshRunnable,10000);
+    private void startRefresh(boolean scrollBack){
+        if(scrollBack) {
+            removeCallbacks(mRefreshRunnable);
+            postDelayed(mRefreshRunnable, 10000);
+        }else{
+            //TODO
+        }
+    }
+
+    private boolean scrollBackRightNow(){
+        if(mSupport instanceof M5IHeader){
+            ((M5IHeader) mSupport).scrollBackRightNow();
+        }
+        return true;
     }
 
     private Runnable mRefreshRunnable = new Runnable() {
         @Override
         public void run() {
-            if(mDragHelper.smoothSlideViewTo(mTarget,mOriginLeft,mOriginTop)){
+            if (mDragHelper.smoothSlideViewTo(mTarget, mOriginLeft, mOriginTop)) {
                 ViewCompat.postInvalidateOnAnimation(M5ViewGroupPullHeader.this);
             }
             isRefreshing = false;
         }
     };
+
+
+
 
     private void setupAdapter(){
         if(mTarget instanceof AbsListView){

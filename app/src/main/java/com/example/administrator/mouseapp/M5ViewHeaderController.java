@@ -5,7 +5,7 @@ package com.example.administrator.mouseapp;
  */
 public class M5ViewHeaderController {
 
-    private int mCurrentHeight,mMinHeight,mNormalHeight,mMaxHeight,mTargetHeight;
+    private int mCurrentHeight,mMinHeight,mNormalHeight,mMaxHeight,mTargetHeight, mHeaderWidth;
 
     public M5ViewHeaderController(int mMinHeight, int mNormalHeight, int mMaxHeight, int mTargetHeight) {
         this.mMinHeight = mMinHeight;
@@ -15,12 +15,20 @@ public class M5ViewHeaderController {
         mCurrentHeight = mMinHeight;
     }
 
+    public int getHeaderWidth() {
+        return mHeaderWidth;
+    }
+
+    public void setHeaderWidth(int headerWidth) {
+        mHeaderWidth = headerWidth;
+    }
+
     public void setCurrentHeight(int currentHeight) {
         mCurrentHeight = currentHeight;
     }
 
     public float getCurrentPercentage(){
-        return mCurrentHeight/mMaxHeight;
+        return mCurrentHeight*1.0f/mNormalHeight;
     }
 
     public int getCurrentHeight() {
@@ -48,13 +56,81 @@ public class M5ViewHeaderController {
     }
 
     public int getExtraTopPadding(M5IHeader.HeaderType type){
-        switch (type){
-            case HIDDEN:
-            case UNSPECIFIED:
-                return getNormalHeight();
-            case VISIBLE:
-                return 0;
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return getNormalHeight();
+                case VISIBLE:
+                    return 0;
+            }
         }
         return getNormalHeight();
     }
+
+    public int getDynamicTop(M5IHeader.HeaderType type){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return mCurrentHeight - mNormalHeight;
+                case VISIBLE:
+                    return 0;
+            }
+        }
+        return mCurrentHeight - mNormalHeight;
+    }
+
+    public boolean shouldIntercept(M5IHeader.HeaderType type){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return isHeaderVisible();
+                case VISIBLE:
+                    return mCurrentHeight > mMinHeight;
+            }
+        }
+        return isHeaderVisible();
+    }
+
+    public int getMaxRange(M5IHeader.HeaderType type , boolean isRefreshing){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return isRefreshing?mNormalHeight:mMaxHeight;
+                case VISIBLE:
+                    return mMaxHeight;
+            }
+        }
+        return isRefreshing?mNormalHeight:mMaxHeight;
+    }
+
+    public boolean shouldScrollBackRelease(M5IHeader.HeaderType type){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return mCurrentHeight <= mTargetHeight;
+                case VISIBLE:
+                    return mCurrentHeight <= mMaxHeight && mCurrentHeight >= mTargetHeight;
+            }
+        }
+        return true;
+    }
+
+    public int getScrollBackHeight(M5IHeader.HeaderType type,boolean reachRefresh,int originY){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return reachRefresh?mNormalHeight:originY;
+                case VISIBLE:
+                    return mNormalHeight;
+            }
+        }
+        return reachRefresh?mNormalHeight:originY;
+    }
+
 }

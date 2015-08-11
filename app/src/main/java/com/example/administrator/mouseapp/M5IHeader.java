@@ -1,5 +1,7 @@
 package com.example.administrator.mouseapp;
 
+import android.view.View;
+
 /**
  * Created by Administrator on 2015/8/10.
  */
@@ -17,9 +19,15 @@ public interface M5IHeader {
 
     float getMaxHeightScale();
 
-    float getTargetHeightScale();
+    float getRefreshHeightScale();
 
-    void dynamicRedraw(int height, float percentage);
+    boolean shouldScrollDownBack();
 
-    void dynamicLayout(int left,int top,int right,int bottom);
+    boolean shouldScrollUpBack();
+
+    boolean scrollBackRightNow();
+
+    void dynamicRedraw(View view,int height, float percentage);
+
+    void dynamicLayout(View view,int left,int top,int right,int bottom);
 }
