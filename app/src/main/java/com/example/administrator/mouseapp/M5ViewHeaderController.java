@@ -3,11 +3,11 @@ package com.example.administrator.mouseapp;
 /**
  * Created by Administrator on 2015/8/10.
  */
-public class M5ViewHeaderManager {
+public class M5ViewHeaderController {
 
     private int mCurrentHeight,mMinHeight,mNormalHeight,mMaxHeight,mTargetHeight;
 
-    public M5ViewHeaderManager(int mMinHeight, int mNormalHeight, int mMaxHeight, int mTargetHeight) {
+    public M5ViewHeaderController(int mMinHeight, int mNormalHeight, int mMaxHeight, int mTargetHeight) {
         this.mMinHeight = mMinHeight;
         this.mNormalHeight = mNormalHeight;
         this.mMaxHeight = mMaxHeight;
@@ -17,6 +17,10 @@ public class M5ViewHeaderManager {
 
     public void setCurrentHeight(int currentHeight) {
         mCurrentHeight = currentHeight;
+    }
+
+    public float getCurrentPercentage(){
+        return mCurrentHeight/mMaxHeight;
     }
 
     public int getCurrentHeight() {
@@ -41,5 +45,16 @@ public class M5ViewHeaderManager {
 
     public boolean reachTargetHeight(){
         return mCurrentHeight>=mTargetHeight;
+    }
+
+    public int getExtraTopPadding(M5IHeader.HeaderType type){
+        switch (type){
+            case HIDDEN:
+            case UNSPECIFIED:
+                return getNormalHeight();
+            case VISIBLE:
+                return 0;
+        }
+        return getNormalHeight();
     }
 }
