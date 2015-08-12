@@ -5,16 +5,22 @@ package com.example.administrator.mouseapp;
  */
 public class M5ViewHeaderController {
 
+    private M5IHeader.HeaderType mType;
+
     private int mCurrentHeight,mMinHeight,mNormalHeight,mMaxHeight,mTargetHeight, mHeaderWidth;
 
-    public M5ViewHeaderController(int mMinHeight, int mNormalHeight, int mMaxHeight, int mTargetHeight) {
+    public M5ViewHeaderController(M5IHeader.HeaderType type, int mMinHeight, int mNormalHeight, int mMaxHeight, int mTargetHeight) {
+        this.mType = type;
         this.mMinHeight = mMinHeight;
         this.mNormalHeight = mNormalHeight;
         this.mMaxHeight = mMaxHeight;
         this.mTargetHeight = mTargetHeight;
-        mCurrentHeight = mMinHeight;
+        mCurrentHeight = getInitHeight(mType);
     }
 
+    public M5IHeader.HeaderType getHeaderType() {
+        return mType;
+    }
     public int getHeaderWidth() {
         return mHeaderWidth;
     }
@@ -53,6 +59,20 @@ public class M5ViewHeaderController {
 
     public boolean reachTargetHeight(){
         return mCurrentHeight>=mTargetHeight;
+    }
+
+
+    private int getInitHeight(M5IHeader.HeaderType type){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return getMinHeight();
+                case VISIBLE:
+                    return getNormalHeight();
+            }
+        }
+        return getMinHeight();
     }
 
     public int getExtraTopPadding(M5IHeader.HeaderType type){
@@ -100,7 +120,7 @@ public class M5ViewHeaderController {
             switch (type){
                 case HIDDEN:
                 case UNSPECIFIED:
-                    return isRefreshing?mNormalHeight:originY;
+                    return originY;
                 case VISIBLE:
                     return mMinHeight;
             }
@@ -126,7 +146,7 @@ public class M5ViewHeaderController {
             switch (type){
                 case HIDDEN:
                 case UNSPECIFIED:
-                    return mCurrentHeight <= mTargetHeight;
+                    return mCurrentHeight <= mMaxHeight;
                 case VISIBLE:
                     return mCurrentHeight <= mMaxHeight && mCurrentHeight >= mTargetHeight;
             }
@@ -158,5 +178,12 @@ public class M5ViewHeaderController {
             }
         }
         return isRefreshing;
+    }
+
+    public boolean scrollBackRefresh(M5IHeader.HeaderType type){
+        if(type == M5IHeader.HeaderType.VISIBLE){
+            return false;
+        }
+        return true;
     }
 }

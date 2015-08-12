@@ -7,8 +7,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 /**
@@ -76,7 +74,7 @@ public class M5ViewGroupOrigin extends LinearLayout {
 
 
     private void init(){
-        LayoutInflater.from(getContext()).inflate(R.layout.m5_view_group,this);
+        LayoutInflater.from(getContext()).inflate(R.layout.m5_view_group_hidden,this);
         mTarget = findViewById(R.id.target);
         mSupport = findViewById(R.id.support);
         setPadding(50,50,50,50);

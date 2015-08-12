@@ -8,7 +8,7 @@ import android.view.View;
 public interface M5IHeader {
 
     enum HeaderType {
-        HIDDEN,VISIBLE, UNSPECIFIED
+        HIDDEN,VISIBLE,UNSPECIFIED
     }
 
     HeaderType getType();

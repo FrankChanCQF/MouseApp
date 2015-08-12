@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.example.administrator.mouseapp.M5HeadScene
+        android:id="@+id/support"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#7ECEC9"/>
+    <!--<com.example.administrator.mouseapp.M5HeadTriangle
+        android:id="@+id/support"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#55448844"/>-->
+    <!--<com.example.administrator.mouseapp.M5HeaderShow-->
+        <!--android:id="@+id/support"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:background="#55448844"/>-->
+    <!--<com.example.administrator.mouseapp.M5HeaderHide-->
+        <!--android:id="@+id/support"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:background="#55448844"/>-->
+    <ListView
+        android:id="@+id/target"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:overScrollMode="never"
+        android:background="#bebebe"/>
+
+
+    <!--<ImageView android:id="@+id/btn"
+               android:layout_width="60dp"
+               android:layout_height="60dp"
+               android:src="@drawable/icon_mobile_live_avatar_default"/>-->
+
+</merge>

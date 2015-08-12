@@ -63,10 +63,9 @@ public class M5HeaderHide extends TextView implements M5IHeader{
 
     @Override
     public void dynamicRedraw(View view,int height,int width, float percentage) {
-        Log.e("frankchan",String.format("percentage:%f",percentage));
     }
     @Override
     public void dynamicLayout(View view,int left, int top, int right, int bottom) {
-        view.layout(left, top, right, bottom);
+        this.layout(left, bottom - getMeasuredHeight(), right, bottom);
     }
 }

@@ -98,6 +98,6 @@ public class M5HeadTriangle extends ImageView implements M5IHeader{
 
     @Override
     public void dynamicLayout(View view,int left, int top, int right, int bottom) {
-        view.layout(left, top, right, bottom);
+        this.layout(left, top, right, bottom);
     }
 }
