@@ -94,6 +94,20 @@ public class M5ViewHeaderController {
         return isHeaderVisible();
     }
 
+
+    public int getMinRange(M5IHeader.HeaderType type , boolean isRefreshing,int originY){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return isRefreshing?mNormalHeight:originY;
+                case VISIBLE:
+                    return mMinHeight;
+            }
+        }
+        return isRefreshing?mNormalHeight:originY;
+    }
+
     public int getMaxRange(M5IHeader.HeaderType type , boolean isRefreshing){
         if(type != null){
             switch (type){
@@ -133,4 +147,16 @@ public class M5ViewHeaderController {
         return reachRefresh?mNormalHeight:originY;
     }
 
+    public boolean interceptRelease(M5IHeader.HeaderType type,boolean isRefreshing){
+        if(type != null){
+            switch (type){
+                case HIDDEN:
+                case UNSPECIFIED:
+                    return isRefreshing;
+                case VISIBLE:
+                    return false;
+            }
+        }
+        return isRefreshing;
+    }
 }

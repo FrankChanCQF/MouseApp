@@ -2,15 +2,26 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.example.administrator.mouseapp.M5HeaderShow
+    <com.example.administrator.mouseapp.M5HeadTriangle
         android:id="@+id/support"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="#55448844"/>
+    <!--<com.example.administrator.mouseapp.M5HeaderShow-->
+        <!--android:id="@+id/support"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:background="#55448844"/>-->
+    <!--<com.example.administrator.mouseapp.M5HeaderHide-->
+        <!--android:id="@+id/support"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:background="#55448844"/>-->
     <ListView
         android:id="@+id/target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:overScrollMode="never"
         android:background="#bebebe"/>
 </merge>

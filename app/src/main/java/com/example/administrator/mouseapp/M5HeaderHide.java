@@ -35,20 +35,6 @@ public class M5HeaderHide extends TextView implements M5IHeader{
         setText("TXT");
     }
 
-    @Override
-    public boolean scrollBackRightNow() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldScrollUpBack() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldScrollDownBack() {
-        return true;
-    }
 
     @Override
     public HeaderType getType() {
@@ -76,10 +62,9 @@ public class M5HeaderHide extends TextView implements M5IHeader{
     }
 
     @Override
-    public void dynamicRedraw(View view,int height, float percentage) {
+    public void dynamicRedraw(View view,int height,int width, float percentage) {
         Log.e("frankchan",String.format("percentage:%f",percentage));
     }
-
     @Override
     public void dynamicLayout(View view,int left, int top, int right, int bottom) {
         view.layout(left, top, right, bottom);

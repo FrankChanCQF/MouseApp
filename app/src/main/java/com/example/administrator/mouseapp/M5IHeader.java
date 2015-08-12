@@ -21,13 +21,7 @@ public interface M5IHeader {
 
     float getRefreshHeightScale();
 
-    boolean shouldScrollDownBack();
-
-    boolean shouldScrollUpBack();
-
-    boolean scrollBackRightNow();
-
-    void dynamicRedraw(View view,int height, float percentage);
+    void dynamicRedraw(View view,int height,int width, float percentage);
 
     void dynamicLayout(View view,int left,int top,int right,int bottom);
 }
