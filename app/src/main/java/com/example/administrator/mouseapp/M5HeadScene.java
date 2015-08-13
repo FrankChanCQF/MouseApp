@@ -89,9 +89,9 @@ public class M5HeadScene extends ImageView implements M5IHeader{
     private void refreshBackgroundColor(float percentage){
         if(mSwitch&&percentage < 1){
             float percent = (percentage - getMinHeightScale())/ maxColorRange;
-            int red = 25 + (int)(101*percent);
-            int green = 25 + (int)(201*percent);
-            int blue = 112 + (int)(89*percent);
+            int red = 70 + (int)(56*percent);
+            int green = 130 + (int)(76*percent);
+            int blue = 180 + (int)(31*percent);
             mCurrentColor = Color.rgb(red,green,blue);
         }
     }
