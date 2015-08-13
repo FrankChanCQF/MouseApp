@@ -80,7 +80,7 @@ public class M5HeaderHide extends TextView implements M5IHeader{
             if(refresh) {
                 setCurrentText(strRefreshing);
             }
-        }else if(percentage == getRefreshHeightScale()){
+        }else if(percentage >= getRefreshHeightScale()){
             if(!refresh) {
                 setCurrentText(strPulling);
             }

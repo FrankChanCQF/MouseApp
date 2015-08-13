@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,20 +20,20 @@ public class M5HeadTriangle extends ImageView implements M5IHeader{
 
     public M5HeadTriangle(Context context) {
         super(context);
-        initSineWave();
+        initBezierWave();
     }
 
     public M5HeadTriangle(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initSineWave();
+        initBezierWave();
     }
 
     public M5HeadTriangle(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initSineWave();
+        initBezierWave();
     }
 
-    private void initSineWave(){
+    private void initBezierWave(){
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.parseColor("#9370DB"));
         mPaint.setStyle(Paint.Style.FILL);
