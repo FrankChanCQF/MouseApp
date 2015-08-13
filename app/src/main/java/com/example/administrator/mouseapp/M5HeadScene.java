@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,30 +15,35 @@ import android.widget.ImageView;
  */
 public class M5HeadScene extends ImageView implements M5IHeader{
 
-    private Paint mPaint1,mPaint2,mPaint3 , mPaint;
+    private Paint mPaint1,mPaint2,mPaint3,mPaint;
 
     private Path mPath1, mPath2 , mPath3;
 
     private int mPivotX, mPivotY,mRadius;
 
-    private int mSunSize = 50;
+    private int mDefaultHeight,mSunSize = 50;
+
+    private int mCurrentColor = Color.rgb(126,206,201);
+
+    private boolean mSwitch = false;
 
     public M5HeadScene(Context context) {
         super(context);
-        initSineWave();
+        initScene();
     }
 
     public M5HeadScene(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initSineWave();
+        initScene();
     }
 
     public M5HeadScene(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initSineWave();
+        initScene();
     }
 
-    private void initSineWave(){
+    private void initScene(){
+
         mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint1.setColor(Color.parseColor("#86DAD7"));
         mPaint1.setStyle(Paint.Style.FILL);
@@ -54,17 +60,40 @@ public class M5HeadScene extends ImageView implements M5IHeader{
         mPath3 = new Path();
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(Color.parseColor("#FFBEB916"));
+        mPaint.setColor(Color.parseColor("#FFFF00"));
         mPaint.setStyle(Paint.Style.FILL);
+
+        if(getTag() instanceof String) {
+            mSwitch = Boolean.parseBoolean((String) getTag());
+        }
+        maxColorRange = 1 - getMinHeightScale();
     }
 
     private void refreshAllPath(int height, int width ,float percentage){
         refreshPath1(height, width);
         refreshPath2(height, width);
         refreshPath3(height, width);
+        mPaint.setAlpha((int)(percentage/getMaxHeightScale()*255));
         mPivotX = (int)(width *(0.28f-0.08f * percentage/getMaxHeightScale()));
         mPivotY = (int)(height *(0.75f- 0.5f * percentage/getMaxHeightScale()));
         mRadius = (int)(mSunSize * (0.8f + 1.0f * percentage/getMaxHeightScale()));
+        if (percentage==1){
+            mDefaultHeight = height;
+        }
+    }
+
+
+
+    private float maxColorRange;
+
+    private void refreshBackgroundColor(float percentage){
+        if(mSwitch&&percentage < 1){
+            float percent = (percentage - getMinHeightScale())/ maxColorRange;
+            int red = 25 + (int)(101*percent);
+            int green = 25 + (int)(201*percent);
+            int blue = 112 + (int)(89*percent);
+            mCurrentColor = Color.rgb(red,green,blue);
+        }
     }
 
     private void refreshPath1(int height,int width){
@@ -114,6 +143,7 @@ public class M5HeadScene extends ImageView implements M5IHeader{
         if(mPath2.isEmpty()){
             return;
         }
+        canvas.drawColor(mCurrentColor);
         canvas.drawCircle(mPivotX,mPivotY,mRadius, mPaint);
         canvas.drawPath(mPath1, mPaint1);
         canvas.drawPath(mPath2, mPaint2);
@@ -137,7 +167,7 @@ public class M5HeadScene extends ImageView implements M5IHeader{
 
     @Override
     public float getMinHeightScale() {
-        return 0.6f;
+        return mSwitch?0.28f:0.6f;
     }
 
     @Override
@@ -146,13 +176,22 @@ public class M5HeadScene extends ImageView implements M5IHeader{
     }
 
     @Override
-    public void dynamicRedraw(View view,int height,int width, float percentage) {
-        refreshAllPath(height, width, percentage);
-        invalidate();
+    public void dynamicRedraw(View view,int height,int width, float percentage,boolean refresh) {
+        if(mSwitch&&percentage<1){
+            refreshBackgroundColor(percentage);
+            setBackgroundColor(mCurrentColor);
+        }else {
+            refreshAllPath(height, width, percentage);
+            invalidate();
+        }
     }
 
     @Override
     public void dynamicLayout(View view,int left, int top, int right, int bottom) {
-        this.layout(left, top, right, bottom);
+        if(mSwitch&&top+mDefaultHeight>=bottom){
+            //TODO
+        }else {
+            this.layout(left, top, right, bottom);
+        }
     }
 }

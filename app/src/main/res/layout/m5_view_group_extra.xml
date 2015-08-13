@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="#7ECEC9"
-        android:tag="false"/>
+        android:tag="true"/>
     <!--<com.example.administrator.mouseapp.M5HeadTriangle
         android:id="@+id/support"
         android:layout_width="match_parent"

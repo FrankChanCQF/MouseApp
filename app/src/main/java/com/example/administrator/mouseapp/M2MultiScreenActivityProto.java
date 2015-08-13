@@ -16,17 +16,16 @@ public class M2MultiScreenActivityProto extends Activity implements OnClickListe
 	private M2MultiViewGroupProto mulTiViewGroup  ;
 	
 	public static int screenWidth  ;
-	public static int scrrenHeight ;
+	public static int screenHeight;
 	
-	private int curscreen = 0;
+	private int curIndex = 0;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		screenWidth = metric.widthPixels ;
-		scrrenHeight = metric.heightPixels;		
-		System.out.println("screenWidth * scrrenHeight --->" + screenWidth + " * " +scrrenHeight);
+		screenHeight = metric.heightPixels;
 		
 		setContentView(R.layout.m2_multiview_proto);
 
@@ -45,24 +44,24 @@ public class M2MultiScreenActivityProto extends Activity implements OnClickListe
 
 		switch (v.getId()) {
 		case R.id.bt_scrollLeft:
-			if(curscreen > 0) {
-			    curscreen -- ;
-			    Toast.makeText(M2MultiScreenActivityProto.this,  +(curscreen+1) + "Page", Toast.LENGTH_SHORT).show();
+			if(curIndex > 0) {
+			    curIndex-- ;
+			    Toast.makeText(M2MultiScreenActivityProto.this,  +(curIndex +1) + "Page", Toast.LENGTH_SHORT).show();
 			}
 			else {
 				Toast.makeText(M2MultiScreenActivityProto.this, "已经在最左边", Toast.LENGTH_SHORT).show();
 			}
-			mulTiViewGroup.scrollTo(curscreen * screenWidth , 0);
+			mulTiViewGroup.scrollTo(curIndex * screenWidth , 0);
 			break;
 		case R.id.bt_scrollRight:
-			if (curscreen < 2 ){
-				curscreen ++ ;
-				Toast.makeText(M2MultiScreenActivityProto.this, (curscreen+1) + "Page", Toast.LENGTH_SHORT).show();
+			if (curIndex < 2 ){
+				curIndex++ ;
+				Toast.makeText(M2MultiScreenActivityProto.this, (curIndex +1) + "Page", Toast.LENGTH_SHORT).show();
 			}
 			else {
 				Toast.makeText(M2MultiScreenActivityProto.this, "已经在最右边", Toast.LENGTH_SHORT).show();
 			}
-			mulTiViewGroup.scrollTo(curscreen * screenWidth, 0);
+			mulTiViewGroup.scrollTo(curIndex * screenWidth, 0);
 			break;
 		}
 	}

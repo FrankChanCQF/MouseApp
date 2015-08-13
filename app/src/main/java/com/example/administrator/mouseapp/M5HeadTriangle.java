@@ -91,7 +91,7 @@ public class M5HeadTriangle extends ImageView implements M5IHeader{
     }
 
     @Override
-    public void dynamicRedraw(View view,int height,int width, float percentage) {
+    public void dynamicRedraw(View view,int height,int width, float percentage,boolean refresh) {
         refreshPath(height,width);
         invalidate();
     }

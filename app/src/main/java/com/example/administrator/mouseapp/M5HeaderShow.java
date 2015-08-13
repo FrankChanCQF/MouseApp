@@ -61,7 +61,7 @@ public class M5HeaderShow extends TextView implements M5IHeader{
     }
 
     @Override
-    public void dynamicRedraw(View view,int height,int width, float percentage) {
+    public void dynamicRedraw(View view,int height,int width, float percentage,boolean refresh) {
         //Log.e("frankchan",String.format("percentage:%f",percentage));
     }
 

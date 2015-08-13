@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="PullRefreshListView">
+        <item name="android:background">#eeeeee</item>
+        <item name="android:listSelector">@drawable/bg_list_selector</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
 </resources>

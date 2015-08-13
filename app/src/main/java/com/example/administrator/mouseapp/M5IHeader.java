@@ -21,7 +21,7 @@ public interface M5IHeader {
 
     float getRefreshHeightScale();
 
-    void dynamicRedraw(View view,int height,int width, float percentage);
-
     void dynamicLayout(View view,int left,int top,int right,int bottom);
+
+    void dynamicRedraw(View view,int height,int width, float percentage,boolean refresh);
 }

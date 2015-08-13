@@ -602,7 +602,7 @@ public class M5ViewDragHelper {
         }
 
         //final int duration = computeSettleDuration(mCapturedView, dx, dy, xvel, yvel);
-        //TODO 修改时间
+        //TODO 锟睫革拷时锟斤拷
         final int duration=500;
         mScroller.startScroll(startLeft, startTop, dx, dy, duration);
 

@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
-//×Ô¶¨ÒåViewGroup £¬ °üº¬ÁËÈý¸öLinearLayout¿Ø¼þ£¬´æ·ÅÔÚ²»Í¬µÄ²¼¾ÖÎ»ÖÃ£¬Í¨¹ýscrollBy»òÕßscrollTo·½·¨ÇÐ»»
+//ï¿½Ô¶ï¿½ï¿½ï¿½ViewGroup ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½LinearLayoutï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½Í¨ï¿½ï¿½scrollByï¿½ï¿½ï¿½ï¿½scrollToï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½
 public class M2MultiViewGroupUltra extends ViewGroup {
 
 	private Context mContext;
 	
 	private static String TAG = "MultiViewGroup";
-    private int curScreen = 0 ;  //µ±Ç°ÆÁ
+    private int curScreen = 0 ;  //ï¿½ï¿½Ç°ï¿½ï¿½
 	
     private Scroller mScroller = null ;
     
@@ -34,31 +34,31 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		mContext = context;
 		init();
 	}
-   //startScroll »¬ÆÁ
+   //startScroll ï¿½ï¿½ï¿½ï¿½
 	public void startMove(){
 		curScreen ++ ;
 		Log.i(TAG, "----startMove---- curScreen " + curScreen);
 		
 		Log.i(TAG, "----width  " + getWidth());
-		//²ÉÓÃScrollerÀà¿ØÖÆ»¬¶¯¹ý³Ì
+		//ï¿½ï¿½ï¿½ï¿½Scrollerï¿½ï¿½ï¿½ï¿½Æ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		mScroller.startScroll((curScreen-1) *getWidth(), 0, 
 				getWidth(), 0,3000);
-		//±©Á¦µãÖ±½Óµ½Ä¿±ê³ö
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Óµï¿½Ä¿ï¿½ï¿½ï¿½
 		//scrollTo(curScreen * getWidth(), 0);
-		//ÆäÊµÔÚµã»÷°´Å¥µÄÊ±ºò£¬¾Í»Ø´¥·¢View»æÖÆÁ÷³Ì£¬Õâ¶ùÎÒÃÇÔÚÇ¿ÖÆ»æÖÆÏÂView
+		//ï¿½ï¿½Êµï¿½Úµï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ê±ï¿½ò£¬¾Í»Ø´ï¿½ï¿½ï¿½Viewï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ»ï¿½ï¿½ï¿½ï¿½ï¿½View
 		invalidate();
 	}
-	//Í£Ö¹»¬ÆÁ
+	//Í£Ö¹ï¿½ï¿½ï¿½ï¿½
 	public void stopMove(){
 		
 		Log.v(TAG, "----stopMove ----");
 		
 		if(mScroller != null){
-			//Èç¹û¶¯»­»¹Ã»½áÊø£¬ÎÒÃÇ¾Í°´ÏÂÁË½áÊøµÄ°´Å¥£¬ÄÇÎÒÃÇ¾Í½áÊø¸Ã¶¯»­£¬¼´ÂíÉÏ»¬¶¯Ö¸¶¨Î»ÖÃ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾Í°ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½Ä°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾Í½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï»ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Î»ï¿½ï¿½
 			if(!mScroller.isFinished()){
 				
 				int scrollCurX= mScroller.getCurrX() ;
-              	//ÅÐ¶ÏÊÇ·ñ´ïµ½ÏÂÒ»ÆÁµÄÖÐ¼äÎ»ÖÃ£¬Èç¹û´ïµ½¾ÍµÖ´ïÏÂÒ»ÆÁ£¬·ñÔò±£³ÖÔÚÔ­ÆÁÄ»
+              	//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ïµ½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ïµ½ï¿½ÍµÖ´ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò±£³ï¿½ï¿½ï¿½Ô­ï¿½ï¿½Ä»
 				//int moveX = scrollCurX - mScroller.getStartX()   ;
                 // Log.i(TAG, "----mScroller.is not finished ---- shouldNext" + shouldNext);
 				//boolean shouldNext = moveX >= getWidth() / 2 ;
@@ -69,7 +69,7 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 				Log.i(TAG, "----mScroller.is not finished ---- scrollCurX " + scrollCurX);
 				mScroller.abortAnimation();
 
-			    //Í£Ö¹ÁË¶¯»­£¬ÎÒÃÇÂíÉÏ»¬µ¹Ä¿±êÎ»ÖÃ
+			    //Í£Ö¹ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï»ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½ï¿½
 				scrollTo(descScreen * getWidth() , 0);
 				mScroller.forceFinished(true);
 				
@@ -79,27 +79,27 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 			else
 				Log.i(TAG, "----OK mScroller.is  finished ---- ");
 	}
-	// Ö»ÓÐµ±Ç°LAYOUTÖÐµÄÄ³¸öCHILDµ¼ÖÂSCROLL·¢Éú¹ö¶¯£¬²Å»áÖÂÊ¹×Ô¼ºµÄCOMPUTESCROLL±»µ÷ÓÃ
+	// Ö»ï¿½Ðµï¿½Ç°LAYOUTï¿½Ðµï¿½Ä³ï¿½ï¿½CHILDï¿½ï¿½ï¿½ï¿½SCROLLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½ï¿½ï¿½Ê¹ï¿½Ô¼ï¿½ï¿½ï¿½COMPUTESCROLLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public void computeScroll() {	
 		// TODO Auto-generated method stub
 		Log.e(TAG, "computeScroll");
-		// Èç¹û·µ»Øtrue£¬±íÊ¾¶¯»­»¹Ã»ÓÐ½áÊø
-		// ÒòÎªÇ°ÃæstartScroll£¬ËùÒÔÖ»ÓÐÔÚstartScrollÍê³ÉÊ± ²Å»áÎªfalse
+		// ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ÎªÇ°ï¿½ï¿½startScrollï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½startScrollï¿½ï¿½ï¿½Ê± ï¿½Å»ï¿½Îªfalse
 		if (mScroller.computeScrollOffset()) {
 			Log.e(TAG, mScroller.getCurrX() + "======" + mScroller.getCurrY());
-			// ²úÉúÁË¶¯»­Ð§¹û Ã¿´Î¹ö¶¯Ò»µã
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ Ã¿ï¿½Î¹ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 			scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
 			
 			Log.e(TAG, "### getleft is " + getLeft() + " ### getRight is " + getRight());
 			
-		    //Ë¢ÐÂView ·ñÔòÐ§¹û¿ÉÄÜÓÐÎó²î
+		    //Ë¢ï¿½ï¿½View ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			postInvalidate();
 		}
 		else
 			Log.i(TAG, "have done the scoller -----");
 	}
-	/////ÒÔÉÏ¿ÉÒÔÑÝÊ¾ScrollerÀàµÄÊ¹ÓÃ
+	/////ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Scrollerï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	//// --------------------------------
 	/////--------------------------------
 	
@@ -107,22 +107,22 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 	private static final int TOUCH_STATE_SCROLLING = 1;
 	private int mTouchState = TOUCH_STATE_REST;
 	//-------------------------- 
-	//´¦Àí´¥ÃþÊÂ¼þ ~
+	//ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½Â¼ï¿½ ~
 	public static int  SNAP_VELOCITY = 600 ;
 	private int mTouchSlop = 0 ;
 	private float mLastionMotionX = 0 ;
 	private float mLastMotionY = 0 ;
-	//´¦Àí´¥ÃþµÄËÙÂÊ
+	//ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	private VelocityTracker mVelocityTracker = null ;
 	
-	// Õâ¸ö¸Ð¾õÃ»Ê²Ã´×÷ÓÃ ²»¹Ütrue»¹ÊÇfalse ¶¼ÊÇ»áÖ´ÐÐonTouchEventµÄ ÒòÎª×ÓviewÀïÃæonTouchEvent·µ»ØfalseÁË
+	// ï¿½ï¿½ï¿½ï¿½Ð¾ï¿½Ã»Ê²Ã´ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½ï¿½ï¿½false ï¿½ï¿½ï¿½Ç»ï¿½Ö´ï¿½ï¿½onTouchEventï¿½ï¿½ ï¿½ï¿½Îªï¿½ï¿½viewï¿½ï¿½ï¿½ï¿½onTouchEventï¿½ï¿½ï¿½ï¿½falseï¿½ï¿½
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		// TODO Auto-generated method stub
 		Log.e(TAG, "onInterceptTouchEvent-slop:" + mTouchSlop);
 
 		final int action = ev.getAction();
-		//±íÊ¾ÒÑ¾­¿ªÊ¼»¬¶¯ÁË£¬²»ÐèÒª×ß¸ÃAction_MOVE·½·¨ÁË(µÚÒ»´ÎÊ±¿ÉÄÜµ÷ÓÃ)¡£
+		//ï¿½ï¿½Ê¾ï¿½Ñ¾ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ß¸ï¿½Action_MOVEï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½)ï¿½ï¿½
 		if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
 			return true;
 		}
@@ -134,7 +134,7 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		case MotionEvent.ACTION_MOVE:
 			Log.e(TAG, "onInterceptTouchEvent move");
 			final int xDiff = (int) Math.abs(mLastionMotionX - x);
-			//³¬¹ýÁË×îÐ¡»¬¶¯¾àÀë
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if (xDiff > mTouchSlop) {
 				mTouchState = TOUCH_STATE_SCROLLING;
 			}
@@ -175,14 +175,14 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		
 		super.onTouchEvent(event);
 		
-		//ÊÖÖ¸Î»ÖÃµØµã
+		//ï¿½ï¿½Ö¸Î»ï¿½ÃµØµï¿½
 		float x = event.getX();
 		float y = event.getY();
 		
 		
 		switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
-			//Èç¹ûÆÁÄ»µÄ¶¯»­»¹Ã»½áÊø£¬Äã¾Í°´ÏÂÁË£¬ÎÒÃÇ¾Í½áÊø¸Ã¶¯»­
+			//ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½Ç¾Í½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½
 			if(mScroller != null){
 				if(!mScroller.isFinished()){
 					mScroller.abortAnimation();
@@ -208,20 +208,20 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 			
 			Log.e(TAG , "---velocityX---" + velocityX);
 			
-			//»¬¶¯ËÙÂÊ´ïµ½ÁËÒ»¸ö±ê×¼(¿ìËÙÏòÓÒ»¬ÆÁ£¬·µ»ØÉÏÒ»¸öÆÁÄ») ÂíÉÏ½øÐÐÇÐÆÁ´¦Àí
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê´ïµ½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½×¼(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä») ï¿½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if (velocityX > SNAP_VELOCITY && curScreen > 0) {
 				// Fling enough to move left
 				Log.e(TAG, "snap left");
 				snapToScreen(curScreen - 1);
 			}
-			//¿ìËÙÏò×ó»¬ÆÁ£¬·µ»ØÏÂÒ»¸öÆÁÄ»)
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä»)
 			else if(velocityX < -SNAP_VELOCITY && curScreen < (getChildCount()-1)){
 				Log.e(TAG, "snap right");
 				snapToScreen(curScreen + 1);
 			}
-			//ÒÔÉÏÎª¿ìËÙÒÆ¶¯µÄ £¬Ç¿ÖÆÇÐ»»ÆÁÄ»
+			//ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Ä»
 			else{
-				//ÎÒÃÇÊÇ»ºÂýÒÆ¶¯µÄ£¬Òò´ËÏÈÅÐ¶ÏÊÇ±£ÁôÔÚ±¾ÆÁÄ»»¹ÊÇµ½ÏÂÒ»ÆÁÄ»
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä»
 				snapToDestination();
 			}
 			
@@ -240,19 +240,19 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		
 		return true ;
 	}
-	////ÎÒÃÇÊÇ»ºÂýÒÆ¶¯µÄ
+	////ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 	private void snapToDestination(){
-		//µ±Ç°µÄÆ«ÒÆÎ»ÖÃ
+		//ï¿½ï¿½Ç°ï¿½ï¿½Æ«ï¿½ï¿½Î»ï¿½ï¿½
 		int scrollX = getScrollX() ;
 		int scrollY = getScrollY() ;
 		
 		Log.e(TAG, "### onTouchEvent snapToDestination ### scrollX is " + scrollX);
 
-		//ÅÐ¶ÏÊÇ·ñ³¬¹ýÏÂÒ»ÆÁµÄÖÐ¼äÎ»ÖÃ£¬Èç¹û´ïµ½¾ÍµÖ´ïÏÂÒ»ÆÁ£¬·ñÔò±£³ÖÔÚÔ­ÆÁÄ»	
-		//Ö±½ÓÊ¹ÓÃÕâ¸ö¹«Ê½ÅÐ¶ÏÊÇÄÄÒ»¸öÆÁÄ» Ç°ºó»òÕß×Ô¼º
-		//ÅÐ¶ÏÊÇ·ñ³¬¹ýÏÂÒ»ÆÁµÄÖÐ¼äÎ»ÖÃ£¬Èç¹û´ïµ½¾ÍµÖ´ïÏÂÒ»ÆÁ£¬·ñÔò±£³ÖÔÚÔ­ÆÁÄ»
-		// ÕâÑùµÄÒ»¸ö¼òµ¥¹«Ê½ÒâË¼ÊÇ£º¼ÙÉèµ±Ç°»¬ÆÁÆ«ÒÆÖµ¼´ scrollCurX ¼ÓÉÏÃ¿¸öÆÁÄ»Ò»°ëµÄ¿í¶È£¬³ýÒÔÃ¿¸öÆÁÄ»µÄ¿í¶È¾ÍÊÇ
-		//  ÎÒÃÇÄ¿±êÆÁËùÔÚÎ»ÖÃÁË¡£ ¼ÙÈçÃ¿¸öÆÁÄ»¿í¶ÈÎª320dip, ÎÒÃÇ»¬µ½ÁË500dip´¦£¬ºÜÏÔÈ»ÎÒÃÇÓ¦¸Ãµ½´ïµÚ¶þÆÁ	
+		//ï¿½Ð¶ï¿½ï¿½Ç·ñ³¬¹ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ïµ½ï¿½ÍµÖ´ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò±£³ï¿½ï¿½ï¿½Ô­ï¿½ï¿½Ä»	
+		//Ö±ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä» Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½
+		//ï¿½Ð¶ï¿½ï¿½Ç·ñ³¬¹ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ïµ½ï¿½ÍµÖ´ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò±£³ï¿½ï¿½ï¿½Ô­ï¿½ï¿½Ä»
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½òµ¥¹ï¿½Ê½ï¿½ï¿½Ë¼ï¿½Ç£ï¿½ï¿½ï¿½ï¿½èµ±Ç°ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½Öµï¿½ï¿½ scrollCurX ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ä»Ò»ï¿½ï¿½Ä¿ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ä¿ï¿½È¾ï¿½ï¿½ï¿½
+		//  ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ë¡ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½Îª320dip, ï¿½ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½500dipï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ãµï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½	
 		int destScreen = (getScrollX() + getWidth() / 2 ) / getWidth() ;
 		
 		 
@@ -261,11 +261,11 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		snapToScreen(destScreen);
 	}
     private void snapToScreen(int whichScreen){	
-	    //¼òµ¥µÄÒÆµ½Ä¿±êÆÁÄ»£¬¿ÉÄÜÊÇµ±Ç°ÆÁ»òÕßÏÂÒ»ÆÁÄ»
-	    //Ö±½ÓÌø×ª¹ýÈ¥£¬²»Ì«ÓÑºÃ
+	    //ï¿½òµ¥µï¿½ï¿½Æµï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä»
+	    //Ö±ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½Ì«ï¿½Ñºï¿½
 	    //scrollTo(mLastScreen * getWidth(), 0);
-	    //ÎªÁËÓÑºÃÐÔ£¬ÎÒÃÇÔÚÔö¼ÓÒ»¸ö¶¯»­Ð§¹û
-	    //ÐèÒªÔÙ´Î»¬¶¯µÄ¾àÀë ÆÁ»òÕßÏÂÒ»ÆÁÄ»µÄ¼ÌÐø»¬¶¯¾àÀë
+	    //Îªï¿½ï¿½ï¿½Ñºï¿½ï¿½Ô£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½
+	    //ï¿½ï¿½Òªï¿½Ù´Î»ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä»ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	    curScreen = whichScreen ;
 	    
@@ -278,7 +278,7 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 	    
 	    mScroller.startScroll(getScrollX(), 0, dx, 0,Math.abs(dx) * 2);
 	    
-	    //´ËÊ±ÐèÒªÊÖ¶¯Ë¢ÐÂView ·ñÔòÃ»Ð§¹û
+	    //ï¿½ï¿½Ê±ï¿½ï¿½Òªï¿½Ö¶ï¿½Ë¢ï¿½ï¿½View ï¿½ï¿½ï¿½ï¿½Ã»Ð§ï¿½ï¿½
 	    invalidate();
 	    
     }
@@ -287,7 +287,7 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		
 		mScroller = new Scroller(mContext);
 		
-		// ³õÊ¼»¯3¸ö LinearLayout¿Ø¼þ
+		// ï¿½ï¿½Ê¼ï¿½ï¿½3ï¿½ï¿½ LinearLayoutï¿½Ø¼ï¿½
 		LinearLayout oneLL = new LinearLayout(mContext);
 		oneLL.setBackgroundColor(Color.RED);
         addView(oneLL);
@@ -300,17 +300,17 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		threeLL.setBackgroundColor(Color.BLUE);
 		addView(threeLL);
 		
-		//³õÊ¼»¯Ò»¸ö×îÐ¡»¬¶¯¾àÀë
+		//ï¿½ï¿½Ê¼ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 	}
 
-	// measure¹ý³Ì
+	// measureï¿½ï¿½ï¿½
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
 		Log.i(TAG, "--- start onMeasure --");
 
-		// ÉèÖÃ¸ÃViewGroupµÄ´óÐ¡
+		// ï¿½ï¿½ï¿½Ã¸ï¿½ViewGroupï¿½Ä´ï¿½Ð¡
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		int height = MeasureSpec.getSize(heightMeasureSpec);
 		setMeasuredDimension(width, height);
@@ -319,34 +319,34 @@ public class M2MultiViewGroupUltra extends ViewGroup {
 		Log.i(TAG, "--- onMeasure childCount is -->" + childCount);
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
-			// ÉèÖÃÃ¿¸ö×ÓÊÓÍ¼µÄ´óÐ¡ £¬ ¼´È«ÆÁ
-			child.measure(getWidth(), M2MultiScreenActivityProto.scrrenHeight);
+			// ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Ä´ï¿½Ð¡ ï¿½ï¿½ ï¿½ï¿½È«ï¿½ï¿½
+			child.measure(getWidth(), M2MultiScreenActivityProto.screenHeight);
 		}
 	}
 
 	private int curPage = 0 ;
 	
-	// layout¹ý³Ì
+	// layoutï¿½ï¿½ï¿½
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "--- start onLayout --");
-		int startLeft = 0; // Ã¿¸ö×ÓÊÓÍ¼µÄÆðÊ¼²¼¾Ö×ø±ê
-		int startTop = 10; // ¼ä¾àÉèÖÃÎª10px Ïàµ±ÓÚ android£ºmarginTop= "10px"
+		int startLeft = 0; // Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		int startTop = 10; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª10px ï¿½àµ±ï¿½ï¿½ androidï¿½ï¿½marginTop= "10px"
 		int childCount = getChildCount();
 		Log.i(TAG, "--- onLayout childCount is -->" + childCount );
 
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
 			
-			//¼´Ê¹¿É¼ûµÄ£¬²Å»®µ½ÆÁÄ»ÉÏ
+			//ï¿½ï¿½Ê¹ï¿½É¼ï¿½Ä£ï¿½ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
 			if(child.getVisibility() != View.GONE)
 			    child.layout(startLeft, startTop, 
 					   startLeft + getWidth(), 
-					   startTop + M2MultiScreenActivityProto.scrrenHeight );
+					   startTop + M2MultiScreenActivityProto.screenHeight);
 			    
-			    startLeft = startLeft + getWidth() ; //Ð£×¼Ã¿¸ö×ÓViewµÄÆðÊ¼²¼¾ÖÎ»ÖÃ
-			    //Èý¸ö×ÓÊÓÍ¼µÄÔÚÆÁÄ»ÖÐµÄ·Ö²¼ÈçÏÂ [0 , 320] / [320,640] / [640,960]
+			    startLeft = startLeft + getWidth() ; //Ð£×¼Ã¿ï¿½ï¿½ï¿½ï¿½Viewï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+			    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ÐµÄ·Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ [0 , 320] / [320,640] / [640,960]
 		}
 	}
 }

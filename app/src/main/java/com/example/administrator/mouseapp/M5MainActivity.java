@@ -13,38 +13,56 @@ public class M5MainActivity extends Activity implements View.OnClickListener{
 
     private FrameLayout mContainer;
 
-    private boolean mVisible = false;
+    private int mIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
         setContentView(R.layout.m5_main);
         mContainer  = ((FrameLayout) findViewById(R.id.container));
-        changeToVisible(true);
-        findViewById(R.id.left).setOnClickListener(this);
-        findViewById(R.id.right).setOnClickListener(this);
+        changeToIndex(2);
+        findViewById(R.id.one).setOnClickListener(this);
+        findViewById(R.id.two).setOnClickListener(this);
+        findViewById(R.id.three).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.left:
-                changeToVisible(false);
+            case R.id.one:
+                changeToIndex(1);
                 break;
-            case R.id.right:
-                changeToVisible(true);
+            case R.id.two:
+                changeToIndex(2);
+                break;
+            case R.id.three:
+                changeToIndex(3);
                 break;
         }
     }
 
-    private void changeToVisible(boolean visible){
-        if(mVisible==visible){
+    private void changeToIndex(int index){
+        if(mIndex == index){
             return;
         }
-        mVisible = visible;
+        mIndex = index;
         mContainer.removeAllViews();
-        View view = new M5ViewGroupPullHeader(this,mVisible?R.layout.m5_view_group_visible :R.layout.m5_view_group_hidden);
+        View view = new M5ViewGroupPullHeader(this,getLayoutByIndex(mIndex));
         mContainer.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    private int getLayoutByIndex(int index){
+        switch (index){
+            case 1:
+                return R.layout.m5_view_group_hidden;
+            case 2:
+                return R.layout.m5_view_group_visible;
+            case 3:
+                return R.layout.m5_view_group_extra;
+            default:
+                return R.layout.m5_view_group_visible;
+        }
     }
 
 }

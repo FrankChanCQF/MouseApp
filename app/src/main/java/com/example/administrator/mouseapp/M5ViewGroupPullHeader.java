@@ -159,18 +159,18 @@ public class M5ViewGroupPullHeader extends ViewGroup implements AdapterView.OnIt
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
                 mLastY = event.getRawY();
-                mDragHelper.processTouchEvent(event);
+                processTouchEvent(event);
                 break;
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
-                mDragHelper.processTouchEvent(event);
+                processTouchEvent(event);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 float currentY = event.getRawY();
                 mPullState = PullState.getPullState(currentY - mLastY);
                 if (invokeMoveIntercept()) {
-                    mDragHelper.processTouchEvent(event);
+                    processTouchEvent(event);
                     event.setAction(MotionEvent.ACTION_CANCEL);
                     super.dispatchTouchEvent(event);
                     return true;
@@ -178,12 +178,23 @@ public class M5ViewGroupPullHeader extends ViewGroup implements AdapterView.OnIt
                 break;
             }
             case MotionEvent.ACTION_UP:
-                mDragHelper.processTouchEvent(event);
+                if(mPullState!=PullState.UNSPECIFIED) {
+                    processTouchEvent(event);
+                }
                 break;
             default:
                 break;
         }
         return super.dispatchTouchEvent(event);
+    }
+
+    private void processTouchEvent(MotionEvent event){
+        try {
+            mDragHelper.processTouchEvent(event);
+        }catch (Exception ex){
+            //ViewDragHelper带Bug,导致多点触控时显示Action.MOVE崩溃
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -223,7 +234,7 @@ public class M5ViewGroupPullHeader extends ViewGroup implements AdapterView.OnIt
                     ((M5IHeader) mSupport).dynamicLayout(M5ViewGroupPullHeader.this,left,
                             mHeaderController.getDynamicTop(getHeaderType()) ,left + mHeaderController.getHeaderWidth(),top);
                     ((M5IHeader) mSupport).dynamicRedraw(M5ViewGroupPullHeader.this,mHeaderController.getCurrentHeight(),
-                            mHeaderController.getHeaderWidth(),mHeaderController.getCurrentPercentage());
+                            mHeaderController.getHeaderWidth(),mHeaderController.getCurrentPercentage(),isRefreshing);
                 }else {
                     mSupport.layout(left, top - mHeaderController.getNormalHeight(),
                             left + mHeaderController.getHeaderWidth(), top);
@@ -288,10 +299,10 @@ public class M5ViewGroupPullHeader extends ViewGroup implements AdapterView.OnIt
         isRefreshing = true;
         if(scrollBack) {
             removeCallbacks(mRefreshRunnable);
-            postDelayed(mRefreshRunnable, 10000);
+            postDelayed(mRefreshRunnable, 3000);
         }else{
             removeCallbacks(mEndRunnable);
-            postDelayed(mEndRunnable, 10000);
+            postDelayed(mEndRunnable, 3000);
         }
     }
 

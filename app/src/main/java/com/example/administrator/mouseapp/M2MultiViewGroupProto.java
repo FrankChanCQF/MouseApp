@@ -53,7 +53,7 @@ public class M2MultiViewGroupProto extends ViewGroup {
 		Log.i(TAG, "--- onMeasure childCount is -->" + childCount);
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
-			child.measure(M2MultiScreenActivityProto.screenWidth, M2MultiScreenActivityProto.scrrenHeight);
+			child.measure(M2MultiScreenActivityProto.screenWidth, M2MultiScreenActivityProto.screenHeight);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class M2MultiViewGroupProto extends ViewGroup {
 			View child = getChildAt(i);
 			child.layout(startLeft, startTop, 
 					startLeft + M2MultiScreenActivityProto.screenWidth,
-					startTop + M2MultiScreenActivityProto.scrrenHeight);
+					startTop + M2MultiScreenActivityProto.screenHeight);
 			startLeft = startLeft + M2MultiScreenActivityProto.screenWidth ;
 		}
 	}

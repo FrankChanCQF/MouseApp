@@ -21,14 +21,12 @@
         android:id="@+id/support"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="#55448844"/>
+        android:background="#7ECEC9"/>
     <ListView
         android:id="@+id/target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:overScrollMode="never"
-        android:background="#bebebe"/>
+        style="@style/PullRefreshListView"/>
 
 
     <!--<ImageView android:id="@+id/btn"

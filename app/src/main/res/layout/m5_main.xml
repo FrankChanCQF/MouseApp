@@ -10,14 +10,20 @@
         android:layout_margin="5dp"
         android:layout_alignParentBottom="true">
         <Button
-            android:id="@+id/left"
+            android:id="@+id/one"
             android:layout_weight="1"
-            android:text="Hidden"
+            android:text="One"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <Button
-            android:id="@+id/right"
-            android:text="Visible"
+            android:id="@+id/two"
+            android:text="Two"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/three"
+            android:text="Three"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

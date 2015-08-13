@@ -11,30 +11,24 @@ import android.widget.Button;
  * 
  * @author http://http://blog.csdn.net/qinjuning
  */
-//带有可以切换屏的Activity
 public class M2MultiScreenActivityUltra extends Activity implements OnClickListener {
 
 	private Button bt_scrollLeft;
 	private Button bt_scrollRight;
 	private M2MultiViewGroupUltra mulTiViewGroup  ;
 	
-	public static int screenWidth  ;  // 屏幕宽度
-	public static int scrrenHeight ;  //屏幕高度
-	
-	private int curscreen = 0;   // 当前位于第几屏幕  ，共3个"屏幕"， 3个LinearLayout
+	public static int screenWidth  ;
+	public static int screenHeight;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        //获得屏幕分辨率大小
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		screenWidth = metric.widthPixels ;
-		scrrenHeight = metric.heightPixels;		
-		System.out.println("screenWidth * scrrenHeight --->" + screenWidth + " * " +scrrenHeight);
+		screenHeight = metric.heightPixels;
 		
 		setContentView(R.layout.m2_multiview_ultra);
- 
-        //获取自定义视图的空间引用
+
 		mulTiViewGroup = (M2MultiViewGroupUltra)findViewById(R.id.mymultiViewGroup);
 		
 		bt_scrollLeft = (Button) findViewById(R.id.bt_scrollLeft);
@@ -50,10 +44,10 @@ public class M2MultiScreenActivityUltra extends Activity implements OnClickListe
 
 		switch (v.getId()) {
 		case R.id.bt_scrollLeft:
-			mulTiViewGroup.startMove() ; //下一屏
+			mulTiViewGroup.startMove() ;
 			break;
 		case R.id.bt_scrollRight:
-			mulTiViewGroup.stopMove() ; //停止滑动
+			mulTiViewGroup.stopMove() ;
 			break;
 		}
 	}
