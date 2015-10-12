@@ -14,10 +14,9 @@ import android.view.View;
  */
 public class M7GridDecoration extends RecyclerView.ItemDecoration {
 
-    private int dividerColor;
 
     private int strokeWidth = 10;
-
+    private int dividerColor;
     private Paint paint;
 
     public M7GridDecoration(Context context, int divider) {
@@ -42,6 +41,11 @@ public class M7GridDecoration extends RecyclerView.ItemDecoration {
         drawVertical(c, parent);
     }
 
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        super.onDrawOver(c, parent, state);
+    }
+
     private void drawVertical(Canvas c, RecyclerView parent) {
         for (int i = 0; i < parent.getChildCount(); i++) {
             View view = parent.getChildAt(i);
@@ -62,12 +66,12 @@ public class M7GridDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
-        int right = isLastColumn(parent, itemPosition) ? 0 : strokeWidth;
-        int bottom = isLastRaw(parent, itemPosition) ? 0 : strokeWidth;
-        outRect.set(0, 0, right, bottom);
-//        outRect.set(0,0,strokeWidth,strokeWidth);
-
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int itemPosition = parent.getChildAdapterPosition(view);
+//        int right = isLastColumn(parent, itemPosition) ? 0 : strokeWidth;
+//        int bottom = isLastRaw(parent, itemPosition) ? 0 : strokeWidth;
+//        outRect.set(0, 0, right, bottom);
+        outRect.set(0,0,strokeWidth,strokeWidth);
     }
 
     private int getColumnCount(RecyclerView parent) {

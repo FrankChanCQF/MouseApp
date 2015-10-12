@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +35,11 @@ public class M7MainActivity extends AppCompatActivity {
         recycler = ((RecyclerView) findViewById(R.id.recycler));
 //        recycler.setLayoutManager(new LinearLayoutManager(M7MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
 //        recycler.addItemDecoration(new M7LinearDecoration(M7MainActivity.this, M7LinearDecoration.HORIZONTAL, R.color.recycle_divider_color));
+
+
         recycler.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
         recycler.addItemDecoration(new M7GridDecoration(M7MainActivity.this, R.color.recycle_divider_color));
+
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(mAdapter);
 
@@ -72,6 +76,7 @@ public class M7MainActivity extends AppCompatActivity {
     }
 
     public class TestHolder extends RecyclerView.ViewHolder {
+        boolean isRandom;
         TextView itemText;
         final String[] colors = {"#7da9e4", "#cf8f5c", "#ff5a60", "#999999", "#b2ff6f"};
 
@@ -86,9 +91,13 @@ public class M7MainActivity extends AppCompatActivity {
         }
 
         private void onPrepare() {
-            int r = new Random().nextInt(colors.length);
-            itemText.getLayoutParams().height = r * 30 + 100;
-            itemText.setBackgroundColor(Color.parseColor(colors[r % (colors.length - 1)]));
+            if (!isRandom) {
+                Log.e("Frankchan","onPreset");
+                int r = new Random().nextInt(colors.length);
+                itemText.getLayoutParams().height = r * 30 + 100;
+                itemText.setBackgroundColor(Color.parseColor(colors[r % (colors.length - 1)]));
+            }
+            isRandom = true;
         }
 
     }
