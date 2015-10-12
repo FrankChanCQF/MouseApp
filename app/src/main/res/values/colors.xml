@@ -2,4 +2,6 @@
 <resources>
     <color name="list_normal">#eeeeee</color>
     <color name="list_pressed">#c4c4c4</color>
+
+    <color name="recycle_divider_color">#c5c5c5</color>
 </resources>
